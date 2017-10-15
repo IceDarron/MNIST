@@ -37,21 +37,15 @@ result = imageprepare()
 x = tf.placeholder(tf.float32, [None, 784])
 W = tf.Variable(tf.zeros([784, 10]))
 b = tf.Variable(tf.zeros([10]))
-
 y = tf.nn.softmax(tf.matmul(x, W) + b)
+y_ = tf.placeholder("float", [None, 10])
 
-init = tf.global_variables_initializer()
 
 saver = tf.train.Saver()
 with tf.Session() as sess:
     saver.restore(sess, "save_model/m100/model.ckpt")  # 这里使用了之前保存的模型参数
-    sess.run(init)
     print("Model restored.")
 
-    prediction = tf.argmax(y, 1)
-    predint = prediction.eval(feed_dict={x: [result]}, session=sess)
-
-    y_ = tf.placeholder("float", [None, 10])
     correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
