@@ -44,7 +44,7 @@ sess.run(init)
 saver.save(sess, "save_model/m100/model.ckpt")
 
 # 训练
-for i in range(1000):
+for i in range(100):
     # 100个批处理数据点
     batch_xs, batch_ys = mnist.train.next_batch(100)
     _, c = sess.run([train_step, cross_entropy], feed_dict={x: batch_xs, y_: batch_ys})
