@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
+
 def weight_variable(shape, dtype, name):
     initial = tf.truncated_normal(shape=shape, stddev=0.1, dtype=dtype, name=name)
     return tf.Variable(initial)
@@ -67,7 +68,7 @@ session.run(init)
 
 
 # train
-def Train():
+def train():
     for i in range(500):
         batch = mnist.train.next_batch(50)
         session.run(train, feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
@@ -81,7 +82,6 @@ def Train():
 # save variables
 def save():
     saver = tf.train.Saver()
-
     saver.save(session, save_path)
 
 
@@ -91,7 +91,7 @@ def restore():
     saver.restore(session, save_path)
 
 
-def getTestPicArray(filename):
+def gettestpicarray(filename):
     im = Image.open(filename)
     x_s = 28
     y_s = 28
@@ -110,12 +110,12 @@ def getTestPicArray(filename):
             else:
                 num0 = num0 + 1
 
-    if (num255 > num0):
+    if num255 > num0:
         print("convert!")
         for x in range(x_s):
             for y in range(y_s):
                 im_arr[x][y] = 255 - im_arr[x][y]
-                if (im_arr[x][y] < threshold):  im_arr[x][y] = 0
+                if im_arr[x][y] < threshold:  im_arr[x][y] = 0
                 # if(im_arr[x][y] > threshold) : im_arr[x][y] = 0
                 # else : im_arr[x][y] = 255
                 # if(im_arr[x][y] < threshold): im_arr[x][y] = im_arr[x][y] - im_arr[x][y] / 2
@@ -131,17 +131,18 @@ def getTestPicArray(filename):
     return nm
 
 
-def testMyPicture():
-        testpicture = "Image/4.png"
-        onetestx = getTestPicArray(testpicture)
-        ans = tf.argmax(y_fc2, 1)
-        print("The prediction answer is:")
-        print(session.run(ans, feed_dict={x: onetestx, keep_prob: 1}))
+def testmypicture():
+    testpicture = "plot/8.png"
+    # testpicture = "Image/7.png"
+    onetestx = gettestpicarray(testpicture)
+    ans = tf.argmax(y_fc2, 1)
+    print("The prediction answer is:")
+    print(session.run(ans, feed_dict={x: onetestx, keep_prob: 1}))
 
 
 save_path = "save_model/cnn/cnn.ckpt"
-# Train()
+# train()
 # save()
 restore()
-testMyPicture()
+testmypicture()
 session.close()
