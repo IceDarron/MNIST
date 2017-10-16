@@ -68,8 +68,8 @@ session.run(init)
 
 
 # train
-def train():
-    for i in range(500):
+def trainmodel():
+    for i in range(1000):
         batch = mnist.train.next_batch(50)
         session.run(train, feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
         if i % 100 == 0:
@@ -141,7 +141,7 @@ def testmypicture():
 
 
 save_path = "save_model/cnn/cnn.ckpt"
-# train()
+# trainmodel()
 # save()
 restore()
 testmypicture()

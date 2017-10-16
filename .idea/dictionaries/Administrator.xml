@@ -3,10 +3,12 @@
     <words>
       <w>dtype</w>
       <w>gettestpicarray</w>
+      <w>mnist</w>
       <w>onetestx</w>
       <w>tensorflow</w>
       <w>testmypicture</w>
       <w>testpicture</w>
+      <w>trainmodel</w>
     </words>
   </dictionary>
 </component>
