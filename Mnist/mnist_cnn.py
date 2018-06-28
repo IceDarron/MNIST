@@ -22,7 +22,14 @@ def max_pool_2x2(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 
-mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
+# 绝对路径
+local_path = 'H:/Jetbrains/PyCharm/Workspace/MNIST/Mnist/'
+
+# 模型保存路径
+save_path = local_path + "save_model/cnn/cnn.ckpt"
+
+# 加载数据集
+mnist = input_data.read_data_sets(local_path + "MNIST_data", one_hot=True)
 
 x = tf.placeholder("float", [None, 784])
 y = tf.placeholder("float", [None, 10])
@@ -140,9 +147,55 @@ def testmypicture():
     print(session.run(ans, feed_dict={x: onetestx, keep_prob: 1}))
 
 
-save_path = "save_model/cnn/cnn.ckpt"
-# trainmodel()
-# save()
-restore()
-testmypicture()
-session.close()
+########################################################################################################################
+# 对外提供的接口
+def out_picturecode(img):
+    x_s = 28
+    y_s = 28
+    out = img.resize((x_s, y_s), Image.ANTIALIAS)
+
+    im_arr = np.array(out.convert('L'))
+
+    num0 = 0
+    num255 = 0
+    threshold = 100
+
+    for x in range(x_s):
+        for y in range(y_s):
+            if im_arr[x][y] > threshold:
+                num255 = num255 + 1
+            else:
+                num0 = num0 + 1
+
+    if num255 > num0:
+        for x in range(x_s):
+            for y in range(y_s):
+                im_arr[x][y] = 255 - im_arr[x][y]
+                if im_arr[x][y] < threshold:  im_arr[x][y] = 0
+
+    out = Image.fromarray(np.uint8(im_arr))
+    nm = im_arr.reshape((1, 784))
+
+    nm = nm.astype(np.float32)
+    nm = np.multiply(nm, 1.0 / 255.0)
+
+    return nm
+
+
+def out_picture2string(img):
+    restore()
+    picture_code = out_picturecode(img)
+    ans = tf.argmax(y_fc2, 1)
+    result = session.run(ans, feed_dict={x: picture_code, keep_prob: 1})
+    return result
+
+
+########################################################################################################################
+
+
+if __name__ == '__main__':
+    # trainmodel()
+    # save()
+    restore()
+    testmypicture()
+    session.close()
