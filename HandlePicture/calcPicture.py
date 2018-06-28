@@ -37,3 +37,4 @@ def verification_code2string(image):
 if __name__ == '__main__':
     # print(split_image('imageRandeCode.jpg'))
     print('识别结果为：' + verification_code2string('imageRandeCode (4).jpg'))
+

@@ -6,12 +6,12 @@ from PIL import Image
 
 def weight_variable(shape, dtype, name):
     initial = tf.truncated_normal(shape=shape, stddev=0.1, dtype=dtype, name=name)
-    return tf.Variable(initial)
+    return tf.Variable(initial, dtype=tf.float32)
 
 
 def bias_variable(shape, dtype, name):
     initial = tf.constant(0.1, shape=shape, dtype=dtype, name=name)
-    return tf.Variable(initial)
+    return tf.Variable(initial, dtype=tf.float32)
 
 
 def conv2d(x, W):
@@ -62,7 +62,7 @@ y_fc2 = tf.nn.softmax(tf.matmul(hidden_fc1_dropout, weight_fc2) + bias_fc2)
 
 # create tensorflow structure
 cross_entropy = -tf.reduce_sum(y * tf.log(y_fc2))
-optimize = tf.train.AdamOptimizer(0.0001)
+optimize = tf.train.AdamOptimizer(1e-4)
 train = optimize.minimize(cross_entropy)
 
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_fc2, 1))
@@ -76,7 +76,7 @@ session.run(init)
 
 # train
 def trainmodel():
-    for i in range(1000):
+    for i in range(20000):
         batch = mnist.train.next_batch(50)
         session.run(train, feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
         if i % 100 == 0:
@@ -194,8 +194,8 @@ def out_picture2string(img):
 
 
 if __name__ == '__main__':
-    # trainmodel()
-    # save()
+    trainmodel()
+    save()
     restore()
     testmypicture()
     session.close()
