@@ -4,14 +4,18 @@ import numpy as np
 from PIL import Image
 
 
+save_path = "H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\save_model\\cnn\\cnn.ckpt"
+data_download_path = 'H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\MNIST_data'
+
+
 def weight_variable(shape, dtype, name):
     initial = tf.truncated_normal(shape=shape, stddev=0.1, dtype=dtype, name=name)
-    return tf.Variable(initial, dtype=tf.float32)
+    return tf.Variable(initial)
 
 
 def bias_variable(shape, dtype, name):
     initial = tf.constant(0.1, shape=shape, dtype=dtype, name=name)
-    return tf.Variable(initial, dtype=tf.float32)
+    return tf.Variable(initial)
 
 
 def conv2d(x, W):
@@ -22,14 +26,8 @@ def max_pool_2x2(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 
-# 绝对路径
-local_path = 'H:/Jetbrains/PyCharm/Workspace/MNIST/Mnist/'
-
-# 模型保存路径
-save_path = local_path + "save_model/cnn/cnn.ckpt"
-
-# 加载数据集
-mnist = input_data.read_data_sets(local_path + "MNIST_data", one_hot=True)
+# mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
+mnist = input_data.read_data_sets(data_download_path, one_hot=True)
 
 x = tf.placeholder("float", [None, 784])
 y = tf.placeholder("float", [None, 10])
@@ -62,7 +60,7 @@ y_fc2 = tf.nn.softmax(tf.matmul(hidden_fc1_dropout, weight_fc2) + bias_fc2)
 
 # create tensorflow structure
 cross_entropy = -tf.reduce_sum(y * tf.log(y_fc2))
-optimize = tf.train.AdamOptimizer(1e-4)
+optimize = tf.train.AdamOptimizer(0.0001)
 train = optimize.minimize(cross_entropy)
 
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_fc2, 1))
@@ -75,8 +73,8 @@ session.run(init)
 
 
 # train
-def trainmodel():
-    for i in range(20000):
+def train_model():
+    for i in range(1000):
         batch = mnist.train.next_batch(50)
         session.run(train, feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
         if i % 100 == 0:
@@ -138,7 +136,7 @@ def gettestpicarray(filename):
     return nm
 
 
-def testmypicture():
+def picture2string():
     testpicture = "plot/8.png"
     # testpicture = "Image/7.png"
     onetestx = gettestpicarray(testpicture)
@@ -149,7 +147,7 @@ def testmypicture():
 
 ########################################################################################################################
 # 对外提供的接口
-def out_picturecode(img):
+def out_image2array(img):
     x_s = 28
     y_s = 28
     out = img.resize((x_s, y_s), Image.ANTIALIAS)
@@ -173,7 +171,7 @@ def out_picturecode(img):
                 im_arr[x][y] = 255 - im_arr[x][y]
                 if im_arr[x][y] < threshold:  im_arr[x][y] = 0
 
-    out = Image.fromarray(np.uint8(im_arr))
+    # out = Image.fromarray(np.uint8(im_arr))
     nm = im_arr.reshape((1, 784))
 
     nm = nm.astype(np.float32)
@@ -182,20 +180,17 @@ def out_picturecode(img):
     return nm
 
 
-def out_picture2string(img):
-    restore()
-    picture_code = out_picturecode(img)
+def out_image2num(img):
+    picture_code = out_image2array(img)
     ans = tf.argmax(y_fc2, 1)
     result = session.run(ans, feed_dict={x: picture_code, keep_prob: 1})
     return result
-
-
 ########################################################################################################################
 
 
 if __name__ == '__main__':
-    trainmodel()
-    save()
+    # train_model()
+    # save()
     restore()
-    testmypicture()
+    picture2string()
     session.close()

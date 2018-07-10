@@ -22,19 +22,29 @@ def split_image(image):
     return region
 
 
-def verification_code2string(image):
+def image2num_mnist_cnn(image):
     images = split_image(image)
     result = ''
     for img in images:
-        # mnist_cnn.out_picture2string(img)
-        tmp = ''.join(str(s) for s in mnist_cnn.out_picture2string(img) if s not in [None])
+        tmp = ''.join(str(s) for s in mnist_cnn.out_image2num(img) if s not in [None])
         result = result + tmp
-
-    mnist_cnn.session.close()
     return result
 
 
+def open_mnist_cnn():
+    mnist_cnn.restore()
+
+
+def close_mnist_cnn():
+    mnist_cnn.session.close()
+
+
+########################################################################################################################
+
+
 if __name__ == '__main__':
-    # print(split_image('imageRandeCode.jpg'))
-    print('识别结果为：' + verification_code2string('imageRandeCode (4).jpg'))
+    open_mnist_cnn()
+    print('识别结果为：' + image2num_mnist_cnn('imageRandeCode.jpg'))
+    close_mnist_cnn()
+    exit(0)
 
