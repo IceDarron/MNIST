@@ -3,8 +3,10 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-save_path = "H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\save_model\\m100\\model.ckpt"
-data_download_path = 'H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\MNIST_data'
+# save_path = "H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\save_model\\m100\\model.ckpt"
+# data_download_path = 'H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\MNIST_data'
+save_path = "/Users/tree/PycharmProjects/MNIST/Mnist/save_model/m100/model.ckpt"
+data_download_path = '/Users/tree/PycharmProjects/MNIST/Mnist/MNIST_data'
 
 # 用于下载训练数据
 mnist = input_data.read_data_sets(data_download_path, one_hot=True)
