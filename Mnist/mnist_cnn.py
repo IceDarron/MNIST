@@ -3,9 +3,10 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-
-save_path = "H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\save_model\\cnn\\cnn.ckpt"
-data_download_path = 'H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\MNIST_data'
+# save_path = "H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\save_model\\cnn\\cnn.ckpt"
+# data_download_path = 'H:\\Jetbrains\\PyCharm\\Workspace\\MNIST\\Mnist\\MNIST_data'
+save_path = "/Users/tree/PycharmProjects/MNIST/Mnist/save_model/cnn/cnn.ckpt"
+data_download_path = '/Users/tree/PycharmProjects/MNIST/Mnist/MNIST_data'
 
 
 def weight_variable(shape, dtype, name):
